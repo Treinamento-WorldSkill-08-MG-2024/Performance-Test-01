@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:perf_test/forgot.dart';
 import 'package:perf_test/home.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -40,6 +41,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (_) => const ForgotScreen()));
+                      },
+                      child: const Text("Esqueci minha senha")),
                   OutlinedButton(
                       onPressed: () {
                         Navigator.of(context).push(

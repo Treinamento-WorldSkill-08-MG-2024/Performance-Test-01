@@ -12,6 +12,7 @@ const kRoutesList = [kHomeRoute, kHomeRoute, kHomeRoute];
 var selectedRoute = 0;
 
 /// Project setup took: 13m 20s
+/// Login page took: 11m 02s
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
