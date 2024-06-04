@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:perf_test/home.dart';
+import 'package:perf_test/login.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -11,8 +11,8 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    Future.delayed(const Duration(seconds: 3), () {
-      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const HomeScreen()));
+    Future.delayed(const Duration(seconds: 1), () {
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const LoginScreen()));
     });
 
     super.initState();
