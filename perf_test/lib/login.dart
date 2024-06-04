@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:perf_test/home.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -39,8 +40,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-
-                  OutlinedButton(onPressed: () {}, child: const Text("Enviar")),
+                  OutlinedButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const HomeScreen(),
+                          ),
+                        );
+                      },
+                      child: const Text("Enviar")),
                 ],
               ),
             ),
