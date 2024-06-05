@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:perf_test_01/nav_bar.dart';
+import 'package:perf_test_01/quiz.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -34,12 +34,23 @@ class _HomeScreenState extends State<HomeScreen> {
                   key: ValueKey<int>(i),
                   child: Column(
                     children: [
-                      Text(quizes[i].name),
-                      Text(quizes[i].question),
-                      Text(quizes[i].answer),
+                      const Divider(),
+                      GestureDetector(
+                        child: Column(
+                          children: [
+                            Text(quizes[i].name),
+                            Text(quizes[i].question),
+                            Text(quizes[i].answer),
+                          ],
+                        ),
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(builder: (_) => const QuizScreen()));
+                        },
+                      ),
                       TextButton(
                           onPressed: () => _editQuiz(quizes[i], i),
-                          child: const Text("Edit"))
+                          child: const Text("Edit")),
+                      const Divider(),
                     ],
                   ),
                   onDismissed: (_) {
@@ -67,10 +78,11 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (_) {
         final formKey = GlobalKey<FormState>();
         final nameFieldController = TextEditingController(text: quiz.name);
-        final questionFieldController = TextEditingController(text: quiz.question);
+        final questionFieldController =
+            TextEditingController(text: quiz.question);
 
         return AlertDialog(
-          title: Text("Edit Quiz"),
+          title: const Text("Edit Quiz"),
           content: Column(
             children: [
               Form(
@@ -177,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Navigator.of(context).pop();
                       },
                       child: const Text("Confirmar"),
-                    )
+                    ),
                   ],
                 ),
               ),
