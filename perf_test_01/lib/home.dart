@@ -30,12 +30,23 @@ class _HomeScreenState extends State<HomeScreen> {
               child: ListView.builder(
                 itemCount: quizes.length,
                 shrinkWrap: true,
-                itemBuilder: (c, i) => Column(
-                  children: [
-                    Text(quizes[i].name),
-                    Text(quizes[i].question),
-                    Text(quizes[i].answer),
-                  ],
+                itemBuilder: (c, i) => Dismissible(
+                  key: ValueKey<int>(i),
+                  child: Column(
+                    children: [
+                      Text(quizes[i].name),
+                      Text(quizes[i].question),
+                      Text(quizes[i].answer),
+                      TextButton(
+                          onPressed: () => _editQuiz(quizes[i], i),
+                          child: const Text("Edit"))
+                    ],
+                  ),
+                  onDismissed: (_) {
+                    setState(() {
+                      quizes.removeAt(i);
+                    });
+                  },
                 ),
               ),
             ),
@@ -47,6 +58,70 @@ class _HomeScreenState extends State<HomeScreen> {
         child: const Icon(Icons.plus_one),
       ),
       bottomNavigationBar: const NavBar(),
+    );
+  }
+
+  void _editQuiz(Quiz quiz, int i) {
+    showDialog(
+      context: context,
+      builder: (_) {
+        final formKey = GlobalKey<FormState>();
+        final nameFieldController = TextEditingController(text: quiz.name);
+        final questionFieldController = TextEditingController(text: quiz.question);
+
+        return AlertDialog(
+          title: Text("Edit Quiz"),
+          content: Column(
+            children: [
+              Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: nameFieldController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Failed";
+                        }
+
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      controller: questionFieldController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Failed";
+                        }
+
+                        return null;
+                      },
+                    ),
+                    OutlinedButton(
+                      onPressed: () {
+                        if (!formKey.currentState!.validate()) {
+                          return;
+                        }
+
+                        formKey.currentState!.save();
+
+                        setState(() {
+                          quizes[i] = (Quiz(nameFieldController.text,
+                              questionFieldController.text, quiz.answer));
+                          formKey.currentState!.dispose();
+                        });
+
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("Confirmar"),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
