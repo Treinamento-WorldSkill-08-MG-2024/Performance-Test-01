@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
-class UsersModel {
+class UserModel {
   final String name;
   final String email;
   final String password;
@@ -14,7 +14,7 @@ class UsersModel {
   final int isActive;
   final String image;
 
-  UsersModel(this.name, this.email, this.password, this.points, this.question,
+  UserModel(this.name, this.email, this.password, this.points, this.question,
       this.answer, this.createdAt, this.isActive, this.image);
 }
 
@@ -33,17 +33,17 @@ class UserFields {
 const kBaseUrl = 'https://fredaugusto.com.br/centro40/olimpiada/simulado01';
 
 class UsersApi {
-  Future<List<UsersModel>> getUsers() async {
-    var response = await http.Client().get(Uri.parse('$kBaseUrl/users'));
+  Future<List<UserModel>> getUsers() async {
+    final response = await http.Client().get(Uri.parse('$kBaseUrl/users'));
     if (response.statusCode != HttpStatus.ok) {
       throw Exception("Response's not okay");
     }
 
-    var users = List<UsersModel>.empty(growable: true);
-    var data = jsonDecode(response.body) as List<Map<String, dynamic>>;
-    for (var item in data) {
+    var users = List<UserModel>.empty(growable: true);
+    final data = jsonDecode(response.body) as List<dynamic>;
+    for (Map<String, dynamic> item in data) {
       users.add(
-        UsersModel(
+        UserModel(
             item[UserFields.name],
             item[UserFields.email],
             '',
@@ -60,7 +60,7 @@ class UsersApi {
   }
 
   Future<String> newUser() async {
-    var reqBody = <String, String>{
+    final reqBody = <String, String>{
       UserFields.name: 'dummy2',
       UserFields.email: 'dummy2@dummy.com',
       UserFields.password: '12',
@@ -69,10 +69,10 @@ class UsersApi {
       UserFields.answer: 'sim',
     };
 
-    var request =
+    final request =
         http.MultipartRequest("POST", Uri.parse('$kBaseUrl/users/new'))
           ..fields.addAll(reqBody);
-    var response = await request.send();
+    final response = await request.send();
     if (response.statusCode != HttpStatus.ok) {
       throw Exception("Response not okay");
     }

@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 void main() async {
   runApp(const MainApp());
 }
+
 // Users don't work anymore
 class MainApp extends StatefulWidget {
   const MainApp({super.key});
@@ -18,13 +19,15 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   late Future<CatFactsModel> _futureCatFacts;
-  late Future<String> _futureFred;
+  late Future<List<UserModel>> _futureUsers;
 
   @override
   void initState() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual);
 
-    _futureFred = UsersApi().newUser();
+    final userApi = UsersApi();
+
+    _futureUsers = userApi.getUsers();
     _futureCatFacts = CatApi().getFact();
 
     super.initState();
@@ -45,27 +48,41 @@ class _MainAppState extends State<MainApp> {
                     if (snapshot.hasError) {
                       return Text("Failed ${snapshot.error}");
                     }
-                    
+
                     if (snapshot.connectionState == ConnectionState.done &&
                         snapshot.hasData) {
                       return Text("Data: ${snapshot.data!.fact}");
                     }
-                
+
                     return const CircularProgressIndicator();
                   },
                 ),
-                FutureBuilder<String>(
-                  future: _futureFred,
+             
+                FutureBuilder<List<UserModel>>(
+                  future: _futureUsers,
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
                       return Text("Failed ${snapshot.error}");
                     }
-                    
+
                     if (snapshot.connectionState == ConnectionState.done &&
                         snapshot.hasData) {
-                      return Text("Data: ${snapshot.data}");
+                      final data = snapshot.data!;
+
+                      return Expanded(
+                        child: ListView.builder(
+                          itemCount: data.length,
+                          scrollDirection: Axis.vertical,
+                          itemBuilder: (context, index) => Column(
+                            children: [
+                              Text(data[index].name),
+                              Image.memory(base64Decode(data[index].image.split(',').last))
+                            ],
+                          ),
+                        ),
+                      );
                     }
-                
+
                     return const CircularProgressIndicator();
                   },
                 ),
