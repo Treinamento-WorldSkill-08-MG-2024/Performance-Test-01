@@ -82,4 +82,25 @@ class UsersApi {
 
     return data['message'];
   }
+
+  Future<bool> login(String email, String password) async {
+    final reqBody = <String, String>{
+      UserFields.email: email,
+      UserFields.password: password,
+    };
+
+    final request = http.MultipartRequest("POST", Uri.parse('$kBaseUrl/users'))
+      ..fields.addAll(reqBody);
+    final response = await request.send();
+    if (response.statusCode != 200) {
+      throw Exception("Response's not okay");
+    }
+
+    final stringResponse = await response.stream.bytesToString();
+    final data = jsonDecode(stringResponse) as List<dynamic>;
+
+    print(data);
+
+    return data.isNotEmpty && data[0] != null;
+  }
 }
